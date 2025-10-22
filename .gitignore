@@ -1,0 +1,28 @@
+# Composer dependencies
+/vendor/
+composer.lock
+
+# Node (if used for docs or scripts)
+/node_modules/
+
+# PHPUnit / coverage
+.phpunit.result.cache
+coverage/
+phpunit.xml.bak
+
+# IDEs / Editors
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# OS / Misc
+.DS_Store
+Thumbs.db
+
+# Build / cache / logs
+*.log
+/cache/
+/storage/
+/.env
+.env.local

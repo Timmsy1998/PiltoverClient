@@ -1,0 +1,61 @@
+{
+  "name": "timmsy/piltover-client",
+  "description": "Riot Games API wrapper with Laravel integration.",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "riot",
+    "league of legends",
+    "laravel",
+    "api",
+    "client",
+    "composer",
+    "php"
+  ],
+  "homepage": "https://github.com/Timmsy1998/PiltoverClient",
+  "authors": [
+    {
+      "name": "James Timms",
+      "email": "james@timmsy.dev"
+    }
+  ],
+  "require": {
+    "php": "^8.1",
+    "guzzlehttp/guzzle": "^7.8 || ^8.0",
+    "illuminate/support": "^10.0 || ^11.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^9.0",
+    "phpunit/phpunit": "^11.0",
+    "mockery/mockery": "^1.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "Timmsy\\PiltoverClient\\": "src/"
+    },
+    "files": [
+      "src/Support/helpers.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Timmsy\\PiltoverClient\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Timmsy\\PiltoverClient\\PiltoverClientServiceProvider"
+      ],
+      "aliases": {
+        "Piltover": "Timmsy\\PiltoverClient\\Facades\\Piltover"
+      }
+    }
+  },
+  "scripts": {
+    "test": "phpunit"
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
