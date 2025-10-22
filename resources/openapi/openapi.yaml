@@ -1,0 +1,153 @@
+openapi: 3.1.0
+info:
+  title: PiltoverClient
+  version: 1.0.1
+  description: |
+    PHP/Laravel-friendly wrapper around Riot Games API workflows.
+    **Flow:** Riot ID (gameName + tagLine) → PUUID → Summoner + Matches.
+
+servers:
+  - url: https://{region}.api.riotgames.com
+    description: Riot Regional API
+    variables:
+      region:
+        default: europe
+        enum: [europe, americas, asia]
+  - url: https://{platform}.api.riotgames.com
+    description: Riot Platform API
+    variables:
+      platform:
+        default: euw1
+        enum: [euw1, eun1, na1, br1, la1, la2, oc1, tr1, ru, kr, jp1]
+
+tags:
+  - name: Accounts
+  - name: Summoner
+  - name: Matches
+
+paths:
+  /riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}:
+    get:
+      tags: [Accounts]
+      summary: Resolve account by Riot ID
+      operationId: accountByRiotId
+      parameters:
+        - in: path
+          name: gameName
+          required: true
+          schema: { type: string }
+        - in: path
+          name: tagLine
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Account
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountDto"
+  /lol/summoner/v4/summoners/by-puuid/{puuid}:
+    get:
+      tags: [Summoner]
+      summary: Get Summoner by PUUID
+      operationId: summonerByPuuid
+      parameters:
+        - in: path
+          name: puuid
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Summoner
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SummonerDto"
+  /lol/match/v5/matches/by-puuid/{puuid}/ids:
+    get:
+      tags: [Matches]
+      summary: List match IDs by PUUID
+      operationId: matchesByPuuid
+      parameters:
+        - in: path
+          name: puuid
+          required: true
+          schema: { type: string }
+        - in: query
+          name: start
+          schema: { type: integer, minimum: 0, default: 0 }
+        - in: query
+          name: count
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+      responses:
+        "200":
+          description: Array of match IDs
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: string }
+  /lol/match/v5/matches/{matchId}:
+    get:
+      tags: [Matches]
+      summary: Get match detail
+      operationId: matchById
+      parameters:
+        - in: path
+          name: matchId
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Match detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MatchDto"
+
+components:
+  schemas:
+    AccountDto:
+      type: object
+      properties:
+        puuid: { type: string }
+        gameName: { type: string, nullable: true }
+        tagLine: { type: string, nullable: true }
+    SummonerDto:
+      type: object
+      properties:
+        id: { type: string, description: "Encrypted summoner ID" }
+        accountId: { type: string, description: "Encrypted account ID" }
+        puuid: { type: string }
+        name: { type: string }
+        profileIconId: { type: integer }
+        revisionDate: { type: integer }
+        summonerLevel: { type: integer }
+    MatchDto:
+      type: object
+      description: "LoL match response (truncated); see Riot Match-V5 docs for full schema."
+      properties:
+        metadata:
+          type: object
+          properties:
+            matchId: { type: string }
+            participants:
+              type: array
+              items: { type: string, description: "PUUIDs" }
+        info:
+          type: object
+          properties:
+            gameCreation: { type: integer }
+            gameDuration: { type: integer }
+            queueId: { type: integer }
+            participants:
+              type: array
+              items:
+                type: object
+                properties:
+                  puuid: { type: string }
+                  championName: { type: string }
+                  kills: { type: integer }
+                  deaths: { type: integer }
+                  assists: { type: integer }

@@ -126,6 +126,70 @@ return [
 
 ---
 
+## 📚 API Documentation
+
+PiltoverClient includes a built-in **OpenAPI 3.1** specification and **ReDoc-powered** documentation viewer.
+This allows developers to explore all supported Riot Games API endpoints visually.
+
+---
+
+### 🔧 Laravel Integration
+
+Once installed in a Laravel app, the docs are automatically available at:
+
+- **ReDoc UI:** [`/piltover/docs`](http://your-app.test/piltover/docs)
+- **Raw Spec:** [`/piltover/docs/openapi.json`](http://your-app.test/piltover/docs/openapi.json)
+
+Configure in `config/piltover.php` or `.env`:
+
+```dotenv
+PILTOVER_DOCS_ENABLED=true
+PILTOVER_DOCS_PATH=piltover/docs
+PILTOVER_SPEC_PATH=piltover/docs/openapi.json
+```
+
+Optional authentication:
+
+```php
+'middleware' => ['web', 'auth'],
+```
+
+---
+
+### 🧩 Standalone Mode
+
+PiltoverClient also ships with a local static docs server:
+
+```bash
+composer docs:serve
+```
+
+Visit: [http://127.0.0.1:8765/docs/](http://127.0.0.1:8765/docs/)
+This uses the same OpenAPI spec from `resources/openapi/`.
+
+---
+
+### 🧠 OpenAPI Overview
+
+The included spec documents:
+
+| Endpoint | Scope | Method | Description |
+|-----------|--------|---------|-------------|
+| `/riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}` | Regional | GET | Retrieve account + PUUID by Riot ID |
+| `/lol/summoner/v4/summoners/by-puuid/{puuid}` | Platform | GET | Fetch Summoner profile by PUUID |
+| `/lol/match/v5/matches/by-puuid/{puuid}/ids` | Regional | GET | List recent matches by PUUID |
+| `/lol/match/v5/matches/{matchId}` | Regional | GET | Retrieve match details |
+
+---
+
+### 🧾 Notes
+
+- Works both in Laravel and standalone PHP contexts.
+- Fully PSR-4 compliant — no runtime dependencies beyond `illuminate/support` and `guzzle`.
+- You can extend the `resources/openapi/openapi.yaml` spec as you add endpoints.
+
+---
+
 ## 📦 Future Roadmap
 
 - [ ] Add all Riot endpoints (League, Spectator, Champion)

@@ -10,7 +10,10 @@
     "api",
     "client",
     "composer",
-    "php"
+    "php",
+    "docs",
+    "openapi",
+    "redoc"
   ],
   "homepage": "https://github.com/Timmsy1998/PiltoverClient",
   "authors": [
@@ -53,6 +56,7 @@
     }
   },
   "scripts": {
+    "docs:serve": "php -S 127.0.0.1:8765 -t resources",
     "test": "phpunit"
   },
   "config": {

@@ -39,5 +39,8 @@ class PiltoverClientServiceProvider extends ServiceProvider
             ],
             "piltover-config",
         );
+
+        $this->loadViewsFrom(__DIR__ . "/../resources/views", "piltover");
+        $this->loadRoutesFrom(__DIR__ . "/../routes/piltover_docs.php");
     }
 }
