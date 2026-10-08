@@ -78,5 +78,22 @@
   },
   "conflict": {
     "guzzlehttp/psr7": "<2.12.3"
+  },
+  "archive": {
+    "exclude": [
+      "/vendor",
+      "/node_modules",
+      "/.env",
+      "/.env.*",
+      "/composer.lock",
+      "/.phpunit*",
+      "/coverage",
+      "/storage",
+      "/cache",
+      "/*.log",
+      "/.github",
+      "/tests",
+      "/phpunit.xml"
+    ]
   }
 }
