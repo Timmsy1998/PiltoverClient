@@ -7,6 +7,22 @@ and this project adheres to **[Semantic Versioning](https://semver.org/spec/v2.0
 
 ---
 
+## [2.0.0] — 2026-10-08
+
+### Added
+- All 50 current League of Legends/account developer-portal operations, including tournament-v5, tournament-stub-v5 and RSO endpoints.
+- Generated helpers, contract, endpoint catalogue and OpenAPI reference.
+- Response-driven application/method rate limits, bounded GET retries, Retry-After handling and shared file reservations.
+- Redacted API/rate-limit/transport exceptions, strict HTTPS origin validation, disabled redirects and separate tournament/RSO credentials.
+- Standalone Composer installation without Laravel dependencies; migration and security documentation.
+- Compatibility/advisory CI, weekly endpoint drift checks, Dependabot and conventional-commit release automation with annotated tags.
+
+### Changed
+- Minimum PHP is 8.2; patched Guzzle 7.15.2+ and PSR-7 2.12.3+ are required. Laravel integration supports patched 12.69+ and 13.30+ releases.
+- Oceania match routing uses SEA; SEA account requests use Asia. Invalid routing values fail explicitly.
+- Documentation routes are opt-in; the bundled specification is JSON.
+- Expanded client contract and changed exception types; see docs/migration-v2.md.
+
 ## [1.1.0] — 2025-10-22
 ### ✨ Added — Laravel API Documentation System
 

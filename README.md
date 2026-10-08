@@ -1,206 +1,182 @@
-# 🧠 PiltoverClient
+# PiltoverClient
 
-> A PHP / Laravel-ready API wrapper for the **Riot Games Developer API**, built by **Timmsy**.
+A Composer package for Riot's League of Legends developer APIs, usable in plain PHP and Laravel. PHP 8.2+ is required. Laravel is optional.
 
----
+Version 2 covers **50 distinct operations across 14 API families**, reviewed against [Riot's current API reference](https://developer.riotgames.com/apis/): account, summoner, champion rotation, champion mastery, league, league-exp, clash, challenges, status, spectator, match, RSO match, tournament and tournament-stub. See the [complete method catalogue](docs/endpoints.md). This scope is the developer portal; Data Dragon, local game/replay APIs and the unsupported League Client API are separate services.
 
-## 🚀 Overview
+## Install
 
-PiltoverClient is a lightweight, framework-agnostic API client for the **Riot Games Developer API**.
-It integrates seamlessly with **Laravel** but can also be used in any PHP project.
+Once the release is published to Packagist:
 
-The client implements the modern Riot API flow:
-- 🔹 Resolve players via **account-v1** using their Riot ID (`gameName` + `tagLine`)
-- 🔹 Use **PUUID** to fetch summoner profiles, matches, and more
-- 🔹 Automatically maps platform → regional clusters (EUW → EUROPE, NA → AMERICAS, etc.)
-- 🔹 Provides Laravel Facade + helper for elegant usage
-- 🔹 Fully PSR-compliant, Guzzle-powered
-
----
-
-## ⚙️ Installation
-
-```bash
-composer require timmsy/piltover-client
+```sh
+composer require timmsy/piltover-client:^2.0
 ```
 
----
+Until then, add the repository to your application's `composer.json`, then run the same command after the tag has been pushed:
 
-## 🧩 Laravel Setup
+```json
+{
+  "repositories": [
+    { "type": "vcs", "url": "https://github.com/Timmsy1998/PiltoverClient" }
+  ],
+  "require": { "timmsy/piltover-client": "^2.0" }
+}
+```
 
-If you're using Laravel, PiltoverClient auto-discovers its service provider and facade.
+For local development, use a Composer `path` repository pointing to this checkout with `"options": {"versions": {"timmsy/piltover-client": "2.0.0"}}`. Composer handles autoloading and dependencies; manually copying source files is unnecessary.
 
-### Publish Configuration
+## Plain PHP
 
-```bash
+```php
+require 'vendor/autoload.php';
+
+use Timmsy\PiltoverClient\Http\RiotClient;
+
+$client = new RiotClient(
+    apiKey: getenv('RIOT_API_KEY') ?: '',
+    platform: 'euw1',
+);
+$account = $client->accountByRiotId('TheCHEF', 'EUW');
+$summoner = $client->summonerByPuuid($account['puuid']);
+$ids = $client->matchesByPuuid($account['puuid'], ['count' => 5]);
+if ($ids !== []) {
+    $match = $client->matchById($ids[0]);
+    $timeline = $client->matchTimeline($ids[0]);
+}
+$mastery = $client->championMasteryByPuuid($account['puuid'], 99);
+$challenger = $client->challengerLeague('RANKED_SOLO_5x5');
+```
+
+JSON objects/lists return PHP arrays, integer responses return integers, and empty responses return `null`. Helpers accept encoded-safe raw IDs and optional query arrays. Riot validates request DTOs; follow the linked official reference for fields and permissions. Pagination is explicit: adjust `start`/`count` or `page` yourself to control API consumption.
+
+Every operation also supports a catalogue call:
+
+```php
+$timeline = $client->call('match-v5.getTimeline', ['matchId' => 'EUW1_123456']);
+$operations = $client->endpoints();
+```
+
+Platforms derive their regional cluster automatically. Oceania and SEA matches use `sea`; account-v1 has three clusters, so SEA accounts use `asia`. `regional:` can explicitly override the derived cluster. Tournament APIs use the Americas cluster regardless of platform; the registration body selects the tournament's game region.
+
+## Tournament APIs
+
+[Production tournaments require Riot approval and a tournament-enabled key](https://developer.riotgames.com/docs/lol#tournament-api). Installing the package does not grant access. Stub endpoints use your normal API key and are for development.
+
+```php
+$client = new RiotClient(
+    apiKey: getenv('RIOT_API_KEY') ?: '',
+    platform: 'euw1',
+    tournamentApiKey: getenv('RIOT_TOURNAMENT_API_KEY') ?: null,
+);
+$providerId = $client->registerTournamentProvider([
+    'region' => 'EUW',
+    'url' => 'https://your-app.example/riot/tournament-results',
+]);
+$tournamentId = $client->registerTournament([
+    'providerId' => $providerId,
+    'name' => 'Community Cup',
+]);
+$codes = $client->createTournamentCodes([
+    'mapType' => 'SUMMONERS_RIFT',
+    'pickType' => 'TOURNAMENT_DRAFT',
+    'spectatorType' => 'ALL',
+    'teamSize' => 5,
+], ['tournamentId' => $tournamentId, 'count' => 1]);
+$details = $client->tournamentCode($codes[0]);
+$events = $client->tournamentLobbyEvents($codes[0]);
+$games = $client->tournamentGames($codes[0]);
+$client->updateTournamentCode($codes[0], ['spectatorType' => 'LOBBYONLY']);
+```
+
+Stub equivalents are `registerTournamentStubProvider`, `registerTournamentStub`, `createTournamentStubCodes`, `tournamentStubCode`, and `tournamentStubLobbyEvents`. Riot's callbacks arrive at your application; this package does not expose a callback receiver. Use Riot's documented callback handling and fetch canonical game data before acting on notifications.
+
+## Riot Sign On
+
+RSO requires separate approval and an OAuth integration. Pass the player's bearer token for `accountMe()`, `summonerMe()`, `rsoMatchIds()`, `rsoMatchById()` and `rsoMatchTimeline()`:
+
+```php
+$playerClient = new RiotClient(apiKey: '', platform: 'euw1', rsoAccessToken: $playerAccessToken);
+$player = $playerClient->accountMe();
+```
+
+Create a client per player token. OAuth authorization, token refresh and storage belong to your application. A normal API key cannot replace an RSO token.
+
+## Rate limits and errors
+
+The client learns application and method windows from Riot's response headers and reserves capacity before requests. It respects `Retry-After`, including service limits, and retries GET responses for 429/500/502/503/504 at most twice. POST/PUT and transport failures are never automatically retried, avoiding duplicate providers, tournaments or codes. Defaults are a 10-second request timeout and a 30-second total sleep budget per call; request time is additional.
+
+```php
+use Timmsy\PiltoverClient\Exceptions\RateLimitException;
+use Timmsy\PiltoverClient\Exceptions\RiotApiException;
+use Timmsy\PiltoverClient\Exceptions\TransportException;
+
+try {
+    $status = $client->platformStatus();
+} catch (RateLimitException $e) {
+    // Queue another attempt after $e->retryAfter seconds.
+    // $e->limitType is application, method, service or unknown.
+} catch (RiotApiException $e) {
+    // Inspect $e->statusCode and $e->endpoint; e.g. 403 for key/permission problems.
+} catch (TransportException $e) {
+    // For writes, verify their outcome before attempting again.
+}
+```
+
+Use `maxRetries: 0, maxWaitSeconds: 0` for immediate rate-limit exceptions and queue-based scheduling. Rate limits depend on your key and host, rather than fixed development-key quotas. Limits are unknown until the first response, so coordinate startup bursts. Requests from other applications sharing the key also consume its allowance.
+
+The default limiter lives in one client instance. Share a limiter between clients, and use file storage for workers on the same machine:
+
+```php
+use Timmsy\PiltoverClient\RateLimit\FileRateLimiter;
+
+$client = new RiotClient(
+    apiKey: getenv('RIOT_API_KEY') ?: '',
+    rateLimiter: new FileRateLimiter('/private/app/storage/riot-rate-limits'),
+);
+```
+
+The directory must be private, outside the web root, with reliable local file locking. File reservations are atomic across processes, but do not coordinate separate servers. For distributed workers implement `RateLimit\RateLimiter` using atomic Redis/database transactions, including shared cooldowns. Store hashed credential scopes, never plaintext keys.
+
+## Laravel
+
+Laravel 12.69+ and 13.30+ applications discover the provider and facade automatically. Publish config:
+
+```sh
 php artisan vendor:publish --tag=piltover-config
 ```
 
-### Add to `.env`
-
-```
-RIOT_API_KEY=your_api_key_here
-RIOT_PLATFORM=euw1
-# Optional (will be derived automatically if omitted)
-# RIOT_REGIONAL=europe
-```
-
----
-
-## 💻 Usage Examples
-
-### 🔸 Laravel Facade
+Set `RIOT_API_KEY`, `RIOT_PLATFORM`, and optionally `RIOT_TOURNAMENT_API_KEY`. Access the client through the contract, `Piltover` facade or `piltover()` helper. To share limits across Laravel workers, bind the limiter in your application's service provider before resolving the client:
 
 ```php
-use Timmsy\PiltoverClient\Facades\Piltover;
-
-// 1. Get Account Info by Riot ID
-$account = Piltover::accountByRiotId('TheCHEF', 'EUW');
-
-// 2. Get Summoner Info using PUUID
-$puuid = $account['puuid'] ?? null;
-$summoner = $puuid ? Piltover::summonerByPuuid($puuid) : null;
-
-// 3. Get Matches using PUUID
-$matches = $puuid ? Piltover::matchesByPuuid($puuid, ['count' => 5]) : [];
-
-// 4. Get Single Match Details
-$match = !empty($matches) ? Piltover::matchById($matches[0]) : null;
+$this->app->singleton(
+    \Timmsy\PiltoverClient\RateLimit\RateLimiter::class,
+    fn () => new \Timmsy\PiltoverClient\RateLimit\FileRateLimiter(storage_path('app/riot-rate-limits')),
+);
 ```
 
-### 🔸 Standalone PHP
+Do not configure a global player-specific RSO token in applications with multiple users; construct a per-player client instead.
 
-```php
-use Timmsy\PiltoverClient\Http\RiotClient;
+## Security and documentation
 
-$client = new RiotClient('your_api_key', 'euw1');
-$acct = $client->accountByRiotId('TheCHEF', 'EUW');
-print_r($acct);
-```
+Keys travel in headers over verified HTTPS, only to allowed Riot API origins. Redirects are disabled, arbitrary proxy origins are rejected, and exceptions/debug output omit credentials and upstream response bodies. Keep keys in server-side secrets, never browser bundles or source control. Injected HTTP handlers are trusted application code and can inspect credentials.
 
----
+Documentation routes are disabled by default. Enable `PILTOVER_DOCS_ENABLED=true` for `/piltover/docs` and `/piltover/docs/openapi.json`; set `docs.middleware` to `['web', 'auth']` when restricting access. The UI loads a pinned ReDoc script from its CDN. `composer docs:serve` starts a local viewer at `http://127.0.0.1:8765/docs/`. The generated OpenAPI describes Riot's remote endpoints, not a proxy hosted by your application; consult Riot for full DTO schemas.
 
-## 🧭 Supported Endpoints
+## Maintenance and releases
 
-| Endpoint | Scope | Method | Description |
-|-----------|--------|---------|-------------|
-| `/riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}` | Regional | `accountByRiotId()` | Get player account and PUUID |
-| `/lol/summoner/v4/summoners/by-puuid/{puuid}` | Platform | `summonerByPuuid()` | Get Summoner info |
-| `/lol/match/v5/matches/by-puuid/{puuid}/ids` | Regional | `matchesByPuuid()` | Get recent match IDs |
-| `/lol/match/v5/matches/{matchId}` | Regional | `matchById()` | Get full match details |
-
----
-
-## 🧰 Helpers
-
-```php
-piltover()->matchById('EUW1_123456789');
-```
-
----
-
-## 🧪 Testing
-
-```bash
+```sh
+composer install
 composer test
+composer generate
+composer check:endpoints
+composer release -- auto --dry-run
+composer release -- auto
 ```
 
-Includes PHPUnit + Orchestra Testbench for Laravel context tests.
+The reviewed JSON catalogue generates helpers, the contract, OpenAPI and endpoint documentation. CI checks PHP/Laravel combinations, standalone installation, dependency advisories and generated-file consistency. Development dependency resolution blocks known vulnerable versions, including in minimum-dependency checks. A weekly workflow compares documented verbs/paths with Riot's reference and fails on drift; maintainers must review changes and release updates. Dependabot checks Composer dependencies and GitHub Actions weekly. These workflows run after being pushed to GitHub and do not replace human maintenance.
 
----
+Releases use annotated `vMAJOR.MINOR.PATCH` tags. `auto` reads conventional commits since the current tag: `fix:` bumps patch, `feat:` bumps minor, and `!:`/`BREAKING CHANGE:` bumps major. Explicit `patch`, `minor` and `major` also work. The release command requires a clean checkout, validates Composer, runs tests, updates VERSION/OpenAPI/changelog, commits, and tags locally. Review before `git push --follow-tags`. The manual GitHub Release workflow performs the same checks and pushes the commit and tag atomically from the default branch.
 
-## ⚙️ Config File (`config/piltover.php`)
+Register the repository at Packagist and configure its GitHub hook for automatic tag imports; Composer infers versions from Git tags, so `composer.json` intentionally has no hardcoded `version`. See [migration notes](docs/migration-v2.md) and [security reporting](SECURITY.md).
 
-```php
-return [
-    'api_key'  => env('RIOT_API_KEY'),
-    'platform' => env('RIOT_PLATFORM', 'euw1'),
-    'regional' => env('RIOT_REGIONAL', null),
-    'base_urls' => [
-        'platform' => 'https://{platform}.api.riotgames.com',
-        'regional' => 'https://{regional}.api.riotgames.com',
-    ],
-    'timeout' => 10,
-];
-```
-
----
-
-## 📚 API Documentation
-
-PiltoverClient includes a built-in **OpenAPI 3.1** specification and **ReDoc-powered** documentation viewer.
-This allows developers to explore all supported Riot Games API endpoints visually.
-
----
-
-### 🔧 Laravel Integration
-
-Once installed in a Laravel app, the docs are automatically available at:
-
-- **ReDoc UI:** [`/piltover/docs`](http://your-app.test/piltover/docs)
-- **Raw Spec:** [`/piltover/docs/openapi.json`](http://your-app.test/piltover/docs/openapi.json)
-
-Configure in `config/piltover.php` or `.env`:
-
-```dotenv
-PILTOVER_DOCS_ENABLED=true
-PILTOVER_DOCS_PATH=piltover/docs
-PILTOVER_SPEC_PATH=piltover/docs/openapi.json
-```
-
-Optional authentication:
-
-```php
-'middleware' => ['web', 'auth'],
-```
-
----
-
-### 🧩 Standalone Mode
-
-PiltoverClient also ships with a local static docs server:
-
-```bash
-composer docs:serve
-```
-
-Visit: [http://127.0.0.1:8765/docs/](http://127.0.0.1:8765/docs/)
-This uses the same OpenAPI spec from `resources/openapi/`.
-
----
-
-### 🧠 OpenAPI Overview
-
-The included spec documents:
-
-| Endpoint | Scope | Method | Description |
-|-----------|--------|---------|-------------|
-| `/riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}` | Regional | GET | Retrieve account + PUUID by Riot ID |
-| `/lol/summoner/v4/summoners/by-puuid/{puuid}` | Platform | GET | Fetch Summoner profile by PUUID |
-| `/lol/match/v5/matches/by-puuid/{puuid}/ids` | Regional | GET | List recent matches by PUUID |
-| `/lol/match/v5/matches/{matchId}` | Regional | GET | Retrieve match details |
-
----
-
-### 🧾 Notes
-
-- Works both in Laravel and standalone PHP contexts.
-- Fully PSR-4 compliant — no runtime dependencies beyond `illuminate/support` and `guzzle`.
-- You can extend the `resources/openapi/openapi.yaml` spec as you add endpoints.
-
----
-
-## 📦 Future Roadmap
-
-- [ ] Add all Riot endpoints (League, Spectator, Champion)
-- [ ] Rate-limit & retry middleware
-- [ ] Data Dragon (champions, icons, maps)
-- [ ] Cached responses
-- [ ] CLI utilities for dev testing
-
----
-
-## 📜 License
-
-MIT License © 2025 **James Timms**
-Created and maintained by [@Timmsy1998](https://github.com/Timmsy1998)
+MIT License. PiltoverClient is not endorsed by Riot Games; League of Legends and Riot Games are trademarks of Riot Games, Inc.
