@@ -20,6 +20,6 @@
 <main>
   <redoc spec-url="{{ $specUrl }}"></redoc>
 </main>
-<script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js" defer></script>
+<script src="https://cdn.redoc.ly/redoc/v2.5.1/bundles/redoc.standalone.js" defer></script>
 </body>
 </html>

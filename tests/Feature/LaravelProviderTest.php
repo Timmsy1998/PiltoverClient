@@ -26,6 +26,12 @@ class LaravelProviderTest extends TestCase
         // regional omitted to test auto-derive behavior
     }
 
+    public function test_docs_are_disabled_by_default(): void
+    {
+        $this->get('/piltover/docs')->assertNotFound();
+        $this->get('/piltover/docs/openapi.json')->assertNotFound();
+    }
+
     public function test_container_binding_resolves_contract(): void
     {
         $client = $this->app->make(RiotClientContract::class);

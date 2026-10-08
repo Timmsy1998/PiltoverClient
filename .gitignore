@@ -26,3 +26,5 @@ Thumbs.db
 /storage/
 /.env
 .env.local
+
+.phpunit.cache/

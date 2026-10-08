@@ -24,7 +24,7 @@ class RoutingTest extends TestCase
         $this->assertSame("americas", Routing::regionalFromPlatform("br1"));
         $this->assertSame("americas", Routing::regionalFromPlatform("la1"));
         $this->assertSame("americas", Routing::regionalFromPlatform("la2"));
-        $this->assertSame("americas", Routing::regionalFromPlatform("oc1"));
+        $this->assertSame("sea", Routing::regionalFromPlatform("oc1"));
     }
 
     public function test_regional_from_platform_maps_asia(): void

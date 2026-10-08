@@ -1,0 +1,2309 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "PiltoverClient Riot endpoint reference",
+        "version": "2.0.0",
+        "description": "Remote Riot APIs, not routes exposed by your Laravel application. Response DTOs are defined in Riot documentation."
+    },
+    "servers": [
+        {
+            "url": "https://{platform}.api.riotgames.com",
+            "variables": {
+                "platform": {
+                    "default": "euw1"
+                }
+            }
+        }
+    ],
+    "paths": {
+        "/riot/account/v1/accounts/by-puuid/{puuid}": {
+            "get": {
+                "operationId": "account-v1.getByPuuid",
+                "summary": "accountByPuuid",
+                "tags": [
+                    "account-v1"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "puuid",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://{regional}.api.riotgames.com",
+                        "variables": {
+                            "regional": {
+                                "default": "europe"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}": {
+            "get": {
+                "operationId": "account-v1.getByRiotId",
+                "summary": "accountByRiotId",
+                "tags": [
+                    "account-v1"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "gameName",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tagLine",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://{regional}.api.riotgames.com",
+                        "variables": {
+                            "regional": {
+                                "default": "europe"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/riot/account/v1/accounts/me": {
+            "get": {
+                "operationId": "account-v1.getByAccessToken",
+                "summary": "accountMe",
+                "tags": [
+                    "account-v1"
+                ],
+                "security": [
+                    {
+                        "rso": []
+                    }
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://{regional}.api.riotgames.com",
+                        "variables": {
+                            "regional": {
+                                "default": "europe"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/riot/account/v1/active-shards/by-game/{game}/by-puuid/{puuid}": {
+            "get": {
+                "operationId": "account-v1.getActiveShard",
+                "summary": "activeShard",
+                "tags": [
+                    "account-v1"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "game",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "puuid",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://{regional}.api.riotgames.com",
+                        "variables": {
+                            "regional": {
+                                "default": "europe"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/riot/account/v1/region/by-game/{game}/by-puuid/{puuid}": {
+            "get": {
+                "operationId": "account-v1.getActiveRegion",
+                "summary": "accountRegion",
+                "tags": [
+                    "account-v1"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "game",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "puuid",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://{regional}.api.riotgames.com",
+                        "variables": {
+                            "regional": {
+                                "default": "europe"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}": {
+            "get": {
+                "operationId": "champion-mastery-v4.getAllChampionMasteriesByPUUID",
+                "summary": "championMasteriesByPuuid",
+                "tags": [
+                    "champion-mastery-v4"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "encryptedPUUID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}/by-champion/{championId}": {
+            "get": {
+                "operationId": "champion-mastery-v4.getChampionMasteryByPUUID",
+                "summary": "championMasteryByPuuid",
+                "tags": [
+                    "champion-mastery-v4"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "encryptedPUUID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "championId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/champion-mastery/v4/champion-masteries/by-puuid/{encryptedPUUID}/top": {
+            "get": {
+                "operationId": "champion-mastery-v4.getTopChampionMasteriesByPUUID",
+                "summary": "topChampionMasteriesByPuuid",
+                "tags": [
+                    "champion-mastery-v4"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "encryptedPUUID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/champion-mastery/v4/scores/by-puuid/{encryptedPUUID}": {
+            "get": {
+                "operationId": "champion-mastery-v4.getChampionMasteryScoreByPUUID",
+                "summary": "championMasteryScoreByPuuid",
+                "tags": [
+                    "champion-mastery-v4"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "encryptedPUUID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/platform/v3/champion-rotations": {
+            "get": {
+                "operationId": "champion-v3.getChampionInfo",
+                "summary": "championRotations",
+                "tags": [
+                    "champion-v3"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/clash/v1/players/by-puuid/{puuid}": {
+            "get": {
+                "operationId": "clash-v1.getPlayersByPUUID",
+                "summary": "clashPlayersByPuuid",
+                "tags": [
+                    "clash-v1"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "puuid",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/clash/v1/teams/{teamId}": {
+            "get": {
+                "operationId": "clash-v1.getTeamById",
+                "summary": "clashTeamById",
+                "tags": [
+                    "clash-v1"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "teamId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/clash/v1/tournaments": {
+            "get": {
+                "operationId": "clash-v1.getTournaments",
+                "summary": "clashTournaments",
+                "tags": [
+                    "clash-v1"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/clash/v1/tournaments/by-team/{teamId}": {
+            "get": {
+                "operationId": "clash-v1.getTournamentByTeam",
+                "summary": "clashTournamentByTeam",
+                "tags": [
+                    "clash-v1"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "teamId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/clash/v1/tournaments/{tournamentId}": {
+            "get": {
+                "operationId": "clash-v1.getTournamentById",
+                "summary": "clashTournamentById",
+                "tags": [
+                    "clash-v1"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "tournamentId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/league-exp/v4/entries/{queue}/{tier}/{division}": {
+            "get": {
+                "operationId": "league-exp-v4.getLeagueEntries",
+                "summary": "leagueEntriesExpanded",
+                "tags": [
+                    "league-exp-v4"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "queue",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tier",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "division",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/league/v4/challengerleagues/by-queue/{queue}": {
+            "get": {
+                "operationId": "league-v4.getChallengerLeague",
+                "summary": "challengerLeague",
+                "tags": [
+                    "league-v4"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "queue",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/league/v4/entries/by-puuid/{encryptedPUUID}": {
+            "get": {
+                "operationId": "league-v4.getLeagueEntriesByPUUID",
+                "summary": "leagueEntriesByPuuid",
+                "tags": [
+                    "league-v4"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "encryptedPUUID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/league/v4/entries/{queue}/{tier}/{division}": {
+            "get": {
+                "operationId": "league-v4.getLeagueEntries",
+                "summary": "leagueEntries",
+                "tags": [
+                    "league-v4"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "queue",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tier",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "division",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/league/v4/grandmasterleagues/by-queue/{queue}": {
+            "get": {
+                "operationId": "league-v4.getGrandmasterLeague",
+                "summary": "grandmasterLeague",
+                "tags": [
+                    "league-v4"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "queue",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/league/v4/masterleagues/by-queue/{queue}": {
+            "get": {
+                "operationId": "league-v4.getMasterLeague",
+                "summary": "masterLeague",
+                "tags": [
+                    "league-v4"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "queue",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/challenges/v1/challenges/config": {
+            "get": {
+                "operationId": "lol-challenges-v1.getAllChallengeConfigs",
+                "summary": "challengeConfigs",
+                "tags": [
+                    "lol-challenges-v1"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/challenges/v1/challenges/percentiles": {
+            "get": {
+                "operationId": "lol-challenges-v1.getAllChallengePercentiles",
+                "summary": "challengePercentiles",
+                "tags": [
+                    "lol-challenges-v1"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/challenges/v1/challenges/{challengeId}/config": {
+            "get": {
+                "operationId": "lol-challenges-v1.getChallengeConfigs",
+                "summary": "challengeConfig",
+                "tags": [
+                    "lol-challenges-v1"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "challengeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/challenges/v1/challenges/{challengeId}/leaderboards/by-level/{level}": {
+            "get": {
+                "operationId": "lol-challenges-v1.getChallengeLeaderboards",
+                "summary": "challengeLeaderboard",
+                "tags": [
+                    "lol-challenges-v1"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "challengeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "level",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/challenges/v1/challenges/{challengeId}/percentiles": {
+            "get": {
+                "operationId": "lol-challenges-v1.getChallengePercentiles",
+                "summary": "challengePercentilesById",
+                "tags": [
+                    "lol-challenges-v1"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "challengeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/challenges/v1/player-data/{puuid}": {
+            "get": {
+                "operationId": "lol-challenges-v1.getPlayerData",
+                "summary": "challengePlayerData",
+                "tags": [
+                    "lol-challenges-v1"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "puuid",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/rso-match/v1/matches/ids": {
+            "get": {
+                "operationId": "lol-rso-match-v1.getMatchIds",
+                "summary": "rsoMatchIds",
+                "tags": [
+                    "lol-rso-match-v1"
+                ],
+                "security": [
+                    {
+                        "rso": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "queue",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "endTime",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "startTime",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://{regional}.api.riotgames.com",
+                        "variables": {
+                            "regional": {
+                                "default": "europe"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/lol/rso-match/v1/matches/{matchId}": {
+            "get": {
+                "operationId": "lol-rso-match-v1.getMatch",
+                "summary": "rsoMatchById",
+                "tags": [
+                    "lol-rso-match-v1"
+                ],
+                "security": [
+                    {
+                        "rso": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "matchId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://{regional}.api.riotgames.com",
+                        "variables": {
+                            "regional": {
+                                "default": "europe"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/lol/rso-match/v1/matches/{matchId}/timeline": {
+            "get": {
+                "operationId": "lol-rso-match-v1.getTimeline",
+                "summary": "rsoMatchTimeline",
+                "tags": [
+                    "lol-rso-match-v1"
+                ],
+                "security": [
+                    {
+                        "rso": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "matchId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://{regional}.api.riotgames.com",
+                        "variables": {
+                            "regional": {
+                                "default": "europe"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/lol/status/v4/platform-data": {
+            "get": {
+                "operationId": "lol-status-v4.getPlatformData",
+                "summary": "platformStatus",
+                "tags": [
+                    "lol-status-v4"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/match/v5/matches/by-puuid/{puuid}/ids": {
+            "get": {
+                "operationId": "match-v5.getMatchIdsByPUUID",
+                "summary": "matchesByPuuid",
+                "tags": [
+                    "match-v5"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "puuid",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "startTime",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "endTime",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "queue",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://{regional}.api.riotgames.com",
+                        "variables": {
+                            "regional": {
+                                "default": "europe"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/lol/match/v5/matches/by-puuid/{puuid}/replays": {
+            "get": {
+                "operationId": "match-v5.getReplay",
+                "summary": "replaysByPuuid",
+                "tags": [
+                    "match-v5"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "puuid",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://{regional}.api.riotgames.com",
+                        "variables": {
+                            "regional": {
+                                "default": "europe"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/lol/match/v5/matches/{matchId}": {
+            "get": {
+                "operationId": "match-v5.getMatch",
+                "summary": "matchById",
+                "tags": [
+                    "match-v5"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "matchId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://{regional}.api.riotgames.com",
+                        "variables": {
+                            "regional": {
+                                "default": "europe"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/lol/match/v5/matches/{matchId}/timeline": {
+            "get": {
+                "operationId": "match-v5.getTimeline",
+                "summary": "matchTimeline",
+                "tags": [
+                    "match-v5"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "matchId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://{regional}.api.riotgames.com",
+                        "variables": {
+                            "regional": {
+                                "default": "europe"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "/lol/spectator/v5/active-games/by-summoner/{encryptedPUUID}": {
+            "get": {
+                "operationId": "spectator-v5.getCurrentGameInfoByPuuid",
+                "summary": "activeGameByPuuid",
+                "tags": [
+                    "spectator-v5"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "encryptedPUUID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/summoner/v4/summoners/by-puuid/{encryptedPUUID}": {
+            "get": {
+                "operationId": "summoner-v4.getByPUUID",
+                "summary": "summonerByPuuid",
+                "tags": [
+                    "summoner-v4"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "encryptedPUUID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/summoner/v4/summoners/me": {
+            "get": {
+                "operationId": "summoner-v4.getByAccessToken",
+                "summary": "summonerMe",
+                "tags": [
+                    "summoner-v4"
+                ],
+                "security": [
+                    {
+                        "rso": []
+                    }
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                }
+            }
+        },
+        "/lol/tournament-stub/v5/codes": {
+            "post": {
+                "operationId": "tournament-stub-v5.createTournamentCode",
+                "summary": "createTournamentStubCodes",
+                "tags": [
+                    "tournament-stub-v5"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tournamentId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://americas.api.riotgames.com",
+                        "variables": {}
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "additionalProperties": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/lol/tournament-stub/v5/codes/{tournamentCode}": {
+            "get": {
+                "operationId": "tournament-stub-v5.getTournamentCode",
+                "summary": "tournamentStubCode",
+                "tags": [
+                    "tournament-stub-v5"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "tournamentCode",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://americas.api.riotgames.com",
+                        "variables": {}
+                    }
+                ]
+            }
+        },
+        "/lol/tournament-stub/v5/lobby-events/by-code/{tournamentCode}": {
+            "get": {
+                "operationId": "tournament-stub-v5.getLobbyEventsByCode",
+                "summary": "tournamentStubLobbyEvents",
+                "tags": [
+                    "tournament-stub-v5"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "tournamentCode",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://americas.api.riotgames.com",
+                        "variables": {}
+                    }
+                ]
+            }
+        },
+        "/lol/tournament-stub/v5/providers": {
+            "post": {
+                "operationId": "tournament-stub-v5.registerProviderData",
+                "summary": "registerTournamentStubProvider",
+                "tags": [
+                    "tournament-stub-v5"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://americas.api.riotgames.com",
+                        "variables": {}
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "additionalProperties": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/lol/tournament-stub/v5/tournaments": {
+            "post": {
+                "operationId": "tournament-stub-v5.registerTournament",
+                "summary": "registerTournamentStub",
+                "tags": [
+                    "tournament-stub-v5"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://americas.api.riotgames.com",
+                        "variables": {}
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "additionalProperties": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/lol/tournament/v5/codes": {
+            "post": {
+                "operationId": "tournament-v5.createTournamentCode",
+                "summary": "createTournamentCodes",
+                "tags": [
+                    "tournament-v5"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "tournamentId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://americas.api.riotgames.com",
+                        "variables": {}
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "additionalProperties": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/lol/tournament/v5/codes/{tournamentCode}": {
+            "get": {
+                "operationId": "tournament-v5.getTournamentCode",
+                "summary": "tournamentCode",
+                "tags": [
+                    "tournament-v5"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "tournamentCode",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://americas.api.riotgames.com",
+                        "variables": {}
+                    }
+                ]
+            },
+            "put": {
+                "operationId": "tournament-v5.updateCode",
+                "summary": "updateTournamentCode",
+                "tags": [
+                    "tournament-v5"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "tournamentCode",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://americas.api.riotgames.com",
+                        "variables": {}
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "additionalProperties": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/lol/tournament/v5/games/by-code/{tournamentCode}": {
+            "get": {
+                "operationId": "tournament-v5.getGames",
+                "summary": "tournamentGames",
+                "tags": [
+                    "tournament-v5"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "tournamentCode",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://americas.api.riotgames.com",
+                        "variables": {}
+                    }
+                ]
+            }
+        },
+        "/lol/tournament/v5/lobby-events/by-code/{tournamentCode}": {
+            "get": {
+                "operationId": "tournament-v5.getLobbyEventsByCode",
+                "summary": "tournamentLobbyEvents",
+                "tags": [
+                    "tournament-v5"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "tournamentCode",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://americas.api.riotgames.com",
+                        "variables": {}
+                    }
+                ]
+            }
+        },
+        "/lol/tournament/v5/providers": {
+            "post": {
+                "operationId": "tournament-v5.registerProviderData",
+                "summary": "registerTournamentProvider",
+                "tags": [
+                    "tournament-v5"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://americas.api.riotgames.com",
+                        "variables": {}
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "additionalProperties": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/lol/tournament/v5/tournaments": {
+            "post": {
+                "operationId": "tournament-v5.registerTournament",
+                "summary": "registerTournament",
+                "tags": [
+                    "tournament-v5"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Riot JSON response; see official DTO documentation."
+                    },
+                    "204": {
+                        "description": "Successful empty response."
+                    },
+                    "429": {
+                        "description": "Rate limited; respect Retry-After."
+                    },
+                    "default": {
+                        "description": "Riot error."
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "https://americas.api.riotgames.com",
+                        "variables": {}
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "additionalProperties": true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "apiKey": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "X-Riot-Token"
+            },
+            "rso": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    }
+}

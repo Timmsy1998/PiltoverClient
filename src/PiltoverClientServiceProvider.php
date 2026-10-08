@@ -23,6 +23,12 @@ class PiltoverClientServiceProvider extends ServiceProvider
                 regionalTpl: (string) ($cfg["base_urls"]["regional"] ??
                     "https://{regional}.api.riotgames.com"),
                 timeout: (float) ($cfg["timeout"] ?? 10),
+                tournamentApiKey: $cfg["tournament_api_key"] ?? null,
+                rsoAccessToken: $cfg["rso_access_token"] ?? null,
+                maxRetries: (int) ($cfg["max_retries"] ?? 2),
+                maxWaitSeconds: (float) ($cfg["max_wait_seconds"] ?? 30),
+                rateLimiter: $app->bound(\Timmsy\PiltoverClient\RateLimit\RateLimiter::class)
+                    ? $app->make(\Timmsy\PiltoverClient\RateLimit\RateLimiter::class) : null,
             );
         });
 
